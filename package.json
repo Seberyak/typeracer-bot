@@ -1,0 +1,33 @@
+{
+  "name": "typeracer-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node src/app.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "puppeteer": "^8.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.33",
+    "@types/puppeteer": "^5.4.3",
+    "@typescript-eslint/eslint-plugin": "^4.17.0",
+    "@typescript-eslint/parser": "^4.17.0",
+    "eslint": "^7.21.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-max-params-no-constructor": "^0.0.4",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-sonarjs": "^0.6.0",
+    "prettier": "^2.2.1",
+    "ts-loader": "^8.0.17",
+    "ts-node": "^9.1.1",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^3.7.4",
+    "typescript-eslint": "^0.0.1-alpha.0"
+  }
+}
