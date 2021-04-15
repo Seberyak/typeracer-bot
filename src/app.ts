@@ -2,11 +2,11 @@ import { launch } from "puppeteer";
 import { sleep } from "./utils";
 const browserOptions = {
 	headless: false,
+	timeout: 60e3,
 	defaultViewport: {
 		width: 1366,
 		height: 768,
 	},
-	timeout: 60e3,
 	args: [
 		"--no-sandbox",
 		"--disable-setuid-sandbox" /*'--proxy-server=socks4://176.32.177.30:51870'*/,
@@ -15,33 +15,44 @@ const browserOptions = {
 
 const url = "https://play.typeracer.com";
 
-async function main() {
+async function main(): Promise<void> {
 	const browser = await launch(browserOptions);
 	const page = await browser.newPage();
 	await page.goto(url, { waitUntil: "load" });
-	await sleep(3e3);
+	await sleep(5e3);
 	await page.evaluate(() => {
 		// @ts-ignore
 		document.querySelector(".gwt-Anchor.prompt-button.bkgnd-green").click();
 	});
-	await sleep(5e3);
-	// await page.waitForNavigation({ waitUntil: "load" });
 	console.log("loaded");
-	const text = await page.evaluate(() => {
-		const element0 = document.querySelectorAll(
-			"[unselectable=on]"
-		)[0] as HTMLElement;
-		const element1 = document.querySelectorAll(
-			"[unselectable=on]"
-		)[1] as HTMLElement;
-		const text = (element0.innerText + element1.innerText) as string;
-		console.log(text);
+	await sleep(5e3);
+	const txt = await page.evaluate(() => {
+		const l = document.querySelectorAll("[unselectable=on]");
+		let text = "";
+		l.forEach((el: HTMLElement) => {
+			if (!!el.innerText) {
+				text += el.innerText;
+			}
+		});
 		return text;
 	});
-	console.log("HERE");
-	console.log(text);
+	console.log(txt);
+	await sleep(10e3);
+	for (const el of txt) {
+		await page.type("body", el);
+		await sleep(95);
+	}
 	await sleep(15e3);
-	// page.keyboard.type("e");
+	const pages = await browser.pages();
+	const promises = pages.map((pg) => {
+		return pg.close();
+	});
+
+	await Promise.all(promises);
+
+	await browser.close();
 }
 
-main().then();
+main().then(() => {
+	process.exit(0);
+});
